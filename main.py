@@ -11,8 +11,10 @@ def main():
 
     try:
         print(r.recognize_sphinx(audio))
-    except sr.UnknownValueError:
+    #bad audio
+    except sr.UnknownValueError:=
         print("Sphinx could not understand audio")
+    #req error
     except sr.RequestError as e:
         print("Sphinx error; {0}".format(e))
 
