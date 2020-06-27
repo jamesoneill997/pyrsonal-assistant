@@ -2,7 +2,11 @@ import pyaudio
 import speech_recognition as sr
 import os
 from playsound import playsound as ps
+from gtts import gTTS
 
+def chrome_launch():
+    print("Launching Chrome...")
+    os.system("google-chrome")
 
 def main():
     r = sr.Recognizer()
@@ -10,7 +14,7 @@ def main():
     commands = ["launch", "open", "activate", "search"]
 
     with sr.Microphone() as source:
-        ps("audio.mp3")
+        ps("audio/audio.mp3")
         print("Say something!")
         audio = r.listen(source, timeout=5)
 
@@ -18,30 +22,31 @@ def main():
         text = r.recognize_google(audio).split()
         command = text[0].strip()
         if not command in commands and command not in greetings:
-            print(text[0] + " is not a command")
-
+            output = text[0] + " is not a command"
+        
         if command == "launch":
-            application = text[1]
-            print(application)
-            if application[0].lower().strip() in ["google", "chrome"]:
+            application = text[1].lower().strip()
+            if application in ["google", "chrome"]:
+                output = "Launching Google Chrome..."
                 chrome_launch()
+                ps("./audio/launch.mp3")
 
         if command in greetings:
-            print("Hey there, my name is Pylot, how can I help?")    
-
-
-
+            output = "Hey there, my name is Pylot, how can I help?"
+            ps("./audio/greeting.mp3")
+            main()
 
     #bad audio
     except sr.UnknownValueError:
-        print("Pyrsonal Assistant could not understand audio")
+        ps("./audio/noUnderstand.mp3")
+
     #req error
     except sr.RequestError as e:
-        print("Error; {0}".format(e))
+        output = "Error; {0}".format(e)
+        ps("./audio/requestErr.mp3")
+    
+    print(output)
 
-    def chrome_launch():
-        print("Launching Chrome...")
-        os.system("google-chrome")
 
 if __name__ == "__main__":
     main()
