@@ -3,18 +3,14 @@ import speech_recognition as sr
 import os
 from playsound import playsound as ps
 from gtts import gTTS
+from functionality.chrome_launch import chrome_launch
 import subprocess
 
-
-
-def chrome_launch():
-    print("Launching Chrome...")
-    os.system("google-chrome")
 
 def main():
     my_env = os.environ.copy()
     r = sr.Recognizer()
-    greetings = ["test", "hello", "hi"]
+    greetings = ["test", "hello", "hi", "good morning", "good afternoon", "hey", "hey pylot", "hey pilot"]
     commands = ["launch", "open", "activate", "search", "call"]
 
     with sr.Microphone() as source:
@@ -42,9 +38,12 @@ def main():
             main()
 
         elif command == "call":
-            ps("./audio/launch.mp3")
+            ps("./audio/call.mp3")
             subprocess.call(['/bin/bash', '-i', '-c', "findPhone"])
             output = "Finding phone..."
+
+        elif command == "search":
+            print("Hello")
             
 
     #bad audio

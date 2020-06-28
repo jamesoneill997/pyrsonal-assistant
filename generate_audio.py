@@ -1,7 +1,7 @@
 from gtts import gTTS
 import os
 
-files = ["greeting", "launch", "noUnderstand", "requestErr"]
+files = ["call"]
 
 for i in range(len(files)):
     file = open("script/{}.txt".format(files[i]), "r").read()
