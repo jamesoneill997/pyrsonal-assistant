@@ -1,7 +1,7 @@
 from gtts import gTTS
 import os
 
-files = ["call"]
+files = ["nextCommand"]
 
 for i in range(len(files)):
     file = open("script/{}.txt".format(files[i]), "r").read()
