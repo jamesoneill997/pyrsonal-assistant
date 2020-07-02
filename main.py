@@ -4,12 +4,14 @@ import os
 from playsound import playsound as ps
 from gtts import gTTS
 from functionality.chrome_launch import chrome_launch
+from functionality.open_page import open_page
 import subprocess
 
 def main():
     my_env = os.environ.copy()
     r = sr.Recognizer()
-    greetings = ["test", "hello", "hi", "good morning", "good afternoon", "hey", "hey pylot", "hey pilot"]
+    english_greetings = ["test", "hello", "hi", "good morning", "good afternoon", "hey", "hey pylot", "hey pilot"]
+    fr_greetings  = ["salut", "bonjour", "bonsoir", "bon matin"]
     commands = ["launch", "open", "activate", "search", "call", "ring"]
 
     with sr.Microphone() as source:
@@ -21,7 +23,14 @@ def main():
     try:
         text = r.recognize_google(audio).split()
         command = text[0].strip()
-        if not command in commands and command not in greetings:
+        if command == "no":
+            ps("./audio/exit.mp3")
+            return
+        elif command == "change language":
+            ps("audio/change_lang.mp3")
+
+
+        if not command in commands and command not in english_greetings:
             print(text[0] + " is not a command")
 
         #used to launch applications
@@ -32,9 +41,19 @@ def main():
                 ps("./audio/launch.mp3")
                 ps("./audio/nextCommand.mp3")
                 main()
+            elif application in ["vs code", "code", "visual studio"]:
+                os.system("code")
+                ps("./audio/nextCommand.mp3")
+                main()
+
+        elif command == "open":
+            ps("./audio/launch.mp3")
+            open_page(text[1])
+            ps("./audio/nextCommand.mp3")
+            main()
                     
         #greeting
-        elif command in greetings:
+        elif command in english_greetings:
             ps("./audio/greeting.mp3")
             main()
 
@@ -58,7 +77,6 @@ def main():
 
     #req error
     except sr.RequestError as e:
-        output = "Error; {0}".format(e)
         ps("./audio/requestErr.mp3")
     
 
