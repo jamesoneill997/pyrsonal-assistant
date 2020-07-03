@@ -8,18 +8,23 @@ from functionality.open_page import open_page
 import subprocess
 
 def main():
+    #copy parent vars
     my_env = os.environ.copy()
+    #google speech rec module
     r = sr.Recognizer()
+
+    #greetings and commands
     english_greetings = ["test", "hello", "hi", "good morning", "good afternoon", "hey", "hey pylot", "hey pilot"]
     fr_greetings  = ["salut", "bonjour", "bonsoir", "bon matin"]
     commands = ["launch", "open", "activate", "search", "call", "ring"]
 
+    #mic in
     with sr.Microphone() as source:
         ps("audio/audio.mp3")
         print("Say something!")
         audio = r.listen(source, timeout=5)
         
-
+    #process input
     try:
         text = r.recognize_google(audio).split()
         command = text[0].strip()
@@ -28,7 +33,6 @@ def main():
             return
         elif command == "change language":
             ps("audio/change_lang.mp3")
-
 
         if not command in commands and command not in english_greetings:
             print(text[0] + " is not a command")
